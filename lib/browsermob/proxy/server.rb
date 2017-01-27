@@ -24,6 +24,7 @@ module BrowserMob
         @port    = Integer(opts[:port] || 8080)
         @timeout = Integer(opts[:timeout] || 10)
         @log     = !!opts[:log]
+        @port_range = opts[:port_range] || "#{(@port.to_i + 1).to_s}-#{(@port.to_i + 1 + 500).to_s}"
 
         @process = create_process
       end
@@ -54,7 +55,7 @@ module BrowserMob
       private
 
       def create_process
-        process        = ChildProcess.new(@path, "--port", @port.to_s)
+        process        = ChildProcess.new(@path, "--port", @port.to_s, '--proxyPortRange', @port_range)
         process.leader = true
 
         process.io.inherit! if @log
